@@ -1,0 +1,5 @@
+= sherloc
+
+Generate this with
+    sherloc _doc
+After you have described your command line interface

@@ -1,0 +1,6 @@
+= sherloc
+
+Describe your project here
+
+:include:sherloc.rdoc
+
