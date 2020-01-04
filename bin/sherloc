@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 require 'gli'
+require 'rainbow'
 begin # XXX: Remove this begin/rescue before distributing your app
-require 'sherloc'
+  require 'sherloc'
+
 rescue LoadError
   STDERR.puts "In development, you need to use `bundle exec bin/sherloc` to run your app"
   STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
@@ -30,8 +32,8 @@ class App
   desc 'Perform a scan of a container image or a code file'
   arg_name 'Describe arguments to list here'
   command :scan do |c|
-    # c.desc 'Describe a switch to list'
-    # c.switch :s
+
+    # Define switches
 
     c.desc 'Perform a scan on multiple files'
     c.switch %i[m multi-scan]
@@ -42,48 +44,73 @@ class App
     c.desc 'Scan a code file'
     c.switch %i[c code]
 
-    c.desc 'Specified file'
-    c.flag %i[f file]
-
-    # c.desc 'Describe a flag to list'
-    # c.default_value 'default'
-    # c.flag :f
+    # Scan action logic
 
     c.action do |global_options,options,args|
 
-      # Your command logic here
-      if options[:m]
-        case true
-        when options[:i]
-          puts "image scan multi: %{file}" %options
-          # system("cat " + options[:f]);
-          f = File.open(options[:f])
-          f_lines = f.read.split("\n")
-          f_lines.each_with_index do |line, index|
-            puts "Scanning: " + line + "..."
-            system("trivy --skip-update -f json -o ./json_files/results" + (index+1).to_s + ".json -q " + line);
-            puts "Completed scan of " + line
+      # Separate arguments and switches
+
+      scan_file = args[0]
+      isMulti = options[:m]
+      isCodeFile = options[:c]
+      isImage = options[:i]
+      
+      file_ext = File.extname(scan_file)
+      isJS = file_ext == ".js"
+
+      # File validation
+
+      if isCodeFile && !isJS
+        raise Rainbow("Only .js file types are supported for code scanning").red.inverse
+      end
+
+      if isImage && isJS
+        raise Rainbow("Non-compatible file type for image scanning: " + file_ext).red.inverse
+      end
+
+      if isMulti
+        puts Rainbow("Attempting to parse multi file...").cyan
+        f_lines = File.open(scan_file).read.split("\n")
+
+        f_lines.each_with_index do |line, index|
+
+          file_ext = File.extname(line)
+          isJS = file_ext == ".js"
+
+          if (isCodeFile && !isJS) || (isImage && isJS)
+            raise Rainbow("Unsupported file type in multi file").red.inverse
           end
-        when options[:c]
-          puts "code scan multi: %{file}" %options
-        else
-          "."
-        end
-      else
-        case true
-        when options[:i]
-          puts "image scan single: %{file}" %options
-          puts 'Attempting scan on image: %{file}...' % options
-          system("trivy --skip-update -f json -o ./json_files/results.json -q " + options[:f]);
-        when options[:c]
-          puts "code scan single: %{file}" %options
-        else
-          "."
         end
       end
 
-      # If you have any errors, just raise them
-      # raise "that command made no sense"
+      # Application logic
+
+      if isMulti
+        if isImage
+
+          f_lines.each_with_index do |line, index|
+            puts Rainbow("Scanning: " + line + "...").cyan.inverse
+            system("trivy --skip-update -f json -o ./json_files/results" + (index+1).to_s + ".json " + line);
+            puts Rainbow("Completed scan of " + line).blue.inverse
+          end
+
+        else isCodeFile
+          puts Rainbow("Scanning code file: " + scan_file + "...").cyan.inverse
+        end
+
+      # Single file logic
+      else
+        if isImage
+          puts "image scan single: " + scan_file
+          puts Rainbow("Attempting scan on image: " + scan_file + "...").cyan.inverse
+          system("trivy --skip-update -f json -o ./json_files/results.json " + scan_file);
+          puts Rainbow("Completed scan of " + scan_file).blue.inverse
+
+        else isCodeFile
+          puts Rainbow("Scanning code file: " + scan_file + "...").cyan.inverse
+        end
+      end
+
     end
   end
 
@@ -104,6 +131,13 @@ class App
   # end
 
   pre do |global,command,options,args|
+
+    # scan_file = options[:f]
+    # puts File.extname(scan_file)
+
+    # puts options
+    # puts args[0]
+
     # puts "this runs first"
     # Pre logic here
     # Return true to proceed; false to abort and not call the

@@ -3,6 +3,7 @@ PATH
   specs:
     sherloc (0.0.1)
       gli (= 2.19.0)
+      rainbow (= 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -40,6 +41,7 @@ GEM
     gli (2.19.0)
     multi_json (1.14.1)
     multi_test (0.1.2)
+    rainbow (3.0.0)
     rake (10.4.2)
     rdoc (4.2.1)
     rspec-expectations (3.9.0)
