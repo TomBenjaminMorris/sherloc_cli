@@ -59,35 +59,15 @@ class App
       isJS = file_ext == ".js"
 
       # File validation
+      Sherloc::Validate.run!(options, args)
 
-      if isCodeFile && !isJS
-        raise Rainbow("Only .js file types are supported for code scanning").red.inverse
-      end
-
-      if isImage && isJS
-        raise Rainbow("Non-compatible file type for image scanning: " + file_ext).red.inverse
-      end
-
-      if isMulti
-        puts Rainbow("Attempting to parse multi file...").cyan
-        f_lines = File.open(scan_file).read.split("\n")
-
-        f_lines.each_with_index do |line, index|
-
-          file_ext = File.extname(line)
-          isJS = file_ext == ".js"
-
-          if (isCodeFile && !isJS) || (isImage && isJS)
-            raise Rainbow("Unsupported file type in multi file").red.inverse
-          end
-        end
-      end
+      # Parse multi-file
+      f_lines = Sherloc::ParseMulti.run!(options, args)
 
       # Application logic
 
       if isMulti
         if isImage
-
           f_lines.each_with_index do |line, index|
             puts Rainbow("Scanning: " + line + "...").cyan.inverse
             system("trivy --skip-update -f json -o ./json_files/results" + (index+1).to_s + ".json " + line);
