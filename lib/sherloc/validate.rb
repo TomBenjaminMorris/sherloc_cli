@@ -3,20 +3,17 @@ require 'rainbow'
 
 module Sherloc::Validate
 
-    def self.run!(options, args)
+    def self.run!(options, scan_file)
 
         # Separate arguments and switches
-
-        scan_file = args[0]
         isMulti = options[:m]
-        isCodeFile = options[:c]
+        isCodeFile = options[:f]
         isImage = options[:i]
         
-        file_ext = File.extname(scan_file)
-        isJS = file_ext == ".js"
+        # Detect file type
+        isJS, file_ext = Sherloc::Detect.run!(scan_file)
 
         # File validation
-
         if isCodeFile && !isJS
             raise Rainbow("Only .js file types are supported for code scanning").red.inverse
         end
@@ -24,5 +21,7 @@ module Sherloc::Validate
         if isImage && isJS
             raise Rainbow("Non-compatible file type for image scanning: " + file_ext).red.inverse
         end
+
+        return [isMulti, isCodeFile, isImage]
     end
 end

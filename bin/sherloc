@@ -42,52 +42,40 @@ class App
     c.switch %i[i image]
 
     c.desc 'Scan a code file'
-    c.switch %i[c code]
+    c.switch %i[f file]
 
     # Scan action logic
 
     c.action do |global_options,options,args|
 
-      # Separate arguments and switches
-
+      # Extract scan file from arguments
       scan_file = args[0]
-      isMulti = options[:m]
-      isCodeFile = options[:c]
-      isImage = options[:i]
-      
-      file_ext = File.extname(scan_file)
-      isJS = file_ext == ".js"
+
+      # Detect file type
+      isJS = Sherloc::Detect.run!(scan_file)
 
       # File validation
-      Sherloc::Validate.run!(options, args)
-
-      # Parse multi-file
-      f_lines = Sherloc::ParseMulti.run!(options, args)
-
+      isMulti, isCodeFile, isImage = Sherloc::Validate.run!(options, scan_file)
+      
       # Application logic
-
+      
       if isMulti
-        if isImage
-          f_lines.each_with_index do |line, index|
-            puts Rainbow("Scanning: " + line + "...").cyan.inverse
-            system("trivy --skip-update -f json -o ./json_files/results" + (index+1).to_s + ".json " + line);
-            puts Rainbow("Completed scan of " + line).blue.inverse
-          end
+        # Parse multi-file
+        f_lines = Sherloc::ParseMulti.run!(options, args)
 
+        if isImage
+          Sherloc::ScanImageMulti.run!(f_lines)
         else isCodeFile
-          puts Rainbow("Scanning code file: " + scan_file + "...").cyan.inverse
+          Sherloc::ScanFileMulti.run!(scan_file)
         end
 
       # Single file logic
       else
         if isImage
-          puts "image scan single: " + scan_file
-          puts Rainbow("Attempting scan on image: " + scan_file + "...").cyan.inverse
-          system("trivy --skip-update -f json -o ./json_files/results.json " + scan_file);
-          puts Rainbow("Completed scan of " + scan_file).blue.inverse
-
+          # Sherloc::ScanImage.run!(scan_file)
+          Sherloc::AggregateOutput.run!(isImage)
         else isCodeFile
-          puts Rainbow("Scanning code file: " + scan_file + "...").cyan.inverse
+          Sherloc::ScanFile.run!(scan_file)
         end
       end
 

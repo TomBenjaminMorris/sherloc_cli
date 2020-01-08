@@ -9,7 +9,7 @@ module Sherloc::ParseMulti
 
         scan_file = args[0]
         isMulti = options[:m]
-        isCodeFile = options[:c]
+        isCodeFile = options[:f]
         isImage = options[:i]
         
         file_ext = File.extname(scan_file)
