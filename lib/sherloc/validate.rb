@@ -15,11 +15,11 @@ module Sherloc::Validate
 
         # File validation
         if isCodeFile && !isJS
-            raise Rainbow("Only .js file types are supported for code scanning").red.inverse
+            raise Rainbow("Only .js file types are supported for code scanning\n").red.inverse
         end
 
         if isImage && isJS
-            raise Rainbow("Non-compatible file type for image scanning: " + file_ext).red.inverse
+            raise Rainbow("Non-compatible file type for image scanning: " + file_ext).red.inverse + "\n"
         end
 
         return [isMulti, isCodeFile, isImage]

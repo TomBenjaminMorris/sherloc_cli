@@ -16,7 +16,7 @@ module Sherloc::ParseMulti
         isJS = file_ext == ".js"
 
         if isMulti
-            puts Rainbow("Attempting to parse multi file...").cyan
+            puts Rainbow("Attempting to parse multi file...\n").cyan
             f_lines = File.open(scan_file).read.split("\n")
     
             f_lines.each_with_index do |line, index|
@@ -25,7 +25,7 @@ module Sherloc::ParseMulti
                 isJS = file_ext == ".js"
 
                 if (isCodeFile && !isJS) || (isImage && isJS)
-                    raise Rainbow("Unsupported file type in multi file").red.inverse
+                    raise Rainbow("Unsupported file type in multi file\n").red.inverse
                 end
             end
         end
