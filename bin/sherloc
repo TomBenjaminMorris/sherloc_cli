@@ -14,23 +14,15 @@ end
 class App
   extend GLI::App
 
-  program_desc 'Describe your application here'
+  program_desc 'Sherloc is a container and JavaScript file scanning tool to help you with your workflow and identify gaps in your knowledge relating to security vulnerabilities'
 
   version Sherloc::VERSION  
 
   subcommand_option_handling :normal
   arguments :strict
 
-  desc 'Describe some switch here'
-  switch [:s,:switch]
-
-  desc 'Describe some flag here'
-  default_value 'the default'
-  arg_name 'The name of the argument'
-  flag [:f,:flagname]
-
   desc 'Perform a scan of a container image or a code file'
-  arg_name 'Describe arguments to list here'
+  arg_name 'File or container image to be scanned'
   command :scan do |c|
 
     # Define switches
@@ -65,6 +57,7 @@ class App
 
         if isImage
           Sherloc::ScanImageMulti.run!(f_lines)
+          Sherloc::AggregateOutput.run!(isMulti)
         else isCodeFile
           Sherloc::ScanFileMulti.run!(scan_file)
         end
@@ -73,7 +66,7 @@ class App
       else
         if isImage
           Sherloc::ScanImage.run!(scan_file)
-          Sherloc::AggregateOutput.run!(isImage)
+          Sherloc::AggregateOutput.run!(isMulti)
         else isCodeFile
           Sherloc::ScanFile.run!(scan_file)
         end
@@ -100,6 +93,7 @@ class App
 
   pre do |global,command,options,args|
 
+    system('mkdir -p ./json_files')
     puts "\n"
 
     # scan_file = options[:f]
