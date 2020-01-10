@@ -72,7 +72,7 @@ class App
       # Single file logic
       else
         if isImage
-          # Sherloc::ScanImage.run!(scan_file)
+          Sherloc::ScanImage.run!(scan_file)
           Sherloc::AggregateOutput.run!(isImage)
         else isCodeFile
           Sherloc::ScanFile.run!(scan_file)
