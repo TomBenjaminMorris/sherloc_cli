@@ -11,13 +11,11 @@ spec = Gem::Specification.new do |s|
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'
-  s.extra_rdoc_files = ['README.rdoc','sherloc.rdoc']
-  s.rdoc_options << '--title' << 'sherloc' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'sherloc'
   s.add_development_dependency('rake')
-  s.add_development_dependency('rdoc')
   s.add_development_dependency('aruba')
   s.add_runtime_dependency('gli','2.19.0')
   s.add_runtime_dependency('rainbow','3.0.0')
+  s.add_runtime_dependency('json','2.3.0')
 end

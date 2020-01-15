@@ -1,0 +1,13 @@
+current directory: /Users/tmo01/Documents/MSC/FINAL_PROJECT/CLI_TESTS/sherloc/vendor/bundle/ruby/2.3.0/gems/json-2.3.0/ext/json
+/System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/bin/ruby -r ./siteconf20200115-98441-xgg2qr.rb extconf.rb
+creating Makefile
+
+current directory: /Users/tmo01/Documents/MSC/FINAL_PROJECT/CLI_TESTS/sherloc/vendor/bundle/ruby/2.3.0/gems/json-2.3.0/ext/json
+make "DESTDIR=" clean
+
+current directory: /Users/tmo01/Documents/MSC/FINAL_PROJECT/CLI_TESTS/sherloc/vendor/bundle/ruby/2.3.0/gems/json-2.3.0/ext/json
+make "DESTDIR="
+make: Nothing to be done for `all'.
+
+current directory: /Users/tmo01/Documents/MSC/FINAL_PROJECT/CLI_TESTS/sherloc/vendor/bundle/ruby/2.3.0/gems/json-2.3.0/ext/json
+make "DESTDIR=" install

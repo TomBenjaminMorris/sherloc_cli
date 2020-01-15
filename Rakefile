@@ -35,6 +35,7 @@ require 'cucumber/rake/task'
 # task :cucumber => :features
 # task 'cucumber:wip' => 'features:wip'
 # task :wip => 'features:wip'
+require 'bundler/gem_tasks'
 require 'rake/testtask'
 Rake::TestTask.new do |t|
   t.libs << "test"

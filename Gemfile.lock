@@ -3,6 +3,7 @@ PATH
   specs:
     sherloc (0.0.1)
       gli (= 2.19.0)
+      json (= 2.3.0)
       rainbow (= 3.0.0)
 
 GEM
@@ -39,11 +40,11 @@ GEM
     ffi (1.11.3)
     gherkin (5.1.0)
     gli (2.19.0)
+    json (2.3.0)
     multi_json (1.14.1)
     multi_test (0.1.2)
     rainbow (3.0.0)
     rake (10.4.2)
-    rdoc (4.2.1)
     rspec-expectations (3.9.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
@@ -56,7 +57,6 @@ PLATFORMS
 DEPENDENCIES
   aruba
   rake
-  rdoc
   sherloc!
 
 BUNDLED WITH

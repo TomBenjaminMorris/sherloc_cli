@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 require 'gli'
 require 'rainbow'
-begin # XXX: Remove this begin/rescue before distributing your app
-  require 'sherloc'
+require 'sherloc'
+# begin # XXX: Remove this begin/rescue before distributing your app
 
-rescue LoadError
-  STDERR.puts "In development, you need to use `bundle exec bin/sherloc` to run your app"
-  STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
-  STDERR.puts "Feel free to remove this message from bin/sherloc now"
-  exit 64
-end
+# rescue LoadError
+#   STDERR.puts "In development, you need to use `bundle exec bin/sherloc` to run your app"
+#   STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
+#   STDERR.puts "Feel free to remove this message from bin/sherloc now"
+#   exit 64
+# end
 
 class App
   extend GLI::App
