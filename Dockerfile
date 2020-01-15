@@ -7,9 +7,11 @@ RUN cd /app \
  && bundle install \
  && bundle exec rake build
 
-FROM ruby:latest
+FROM ruby:slim
 
 COPY --from=build ./app/pkg/* .
+
+#RUN apt-get update -y && apt-get install ruby -y
 
 RUN apt-get update \
     && apt-get install wget apt-transport-https gnupg lsb-release -y \
