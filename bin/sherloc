@@ -53,7 +53,7 @@ class App
       
       if isMulti
         # Parse multi-file
-        f_lines = Sherloc::ParseMulti.run!(options, args)
+        f_lines = Sherloc::ParseMulti.run!(scan_file, isImage, isCodeFile)
 
         if isImage
           Sherloc::ScanImageMulti.run!(f_lines)
